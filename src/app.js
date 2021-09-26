@@ -6,12 +6,10 @@ import cors from "cors";
 import hpp from "hpp";
 import path from "path";
 import rateLimit from "express-rate-limit";
-
 import morgan from "morgan";
-import mongoSanitize from "express-mongo-sanitize";
 import dotenv from "dotenv";
 import { notFound, errorHandler } from "./middlewere/errorHandler";
-import setRoutes from "./routes";
+
 
 
 const app = express();
@@ -36,15 +34,14 @@ app.use(helmet()); // Set security headers
 app.use(xssClean()); // Prevent xss attacks
 app.use(hpp()); // Prevent http param polution
 app.use(compression());
-app.use(mongoSanitize()); // Sanitize request
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minuates
   max: 100, // 100 requests
 });
 app.use(limiter);
-// routes setup
-setRoutes(app);
+
 
 // Catch all route
 app.use("*", (req, res) => {
