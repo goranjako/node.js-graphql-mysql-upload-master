@@ -2,10 +2,9 @@
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _compression = _interopRequireDefault(require("compression"));
 
@@ -25,13 +24,15 @@ var _expressRateLimit = _interopRequireDefault(require("express-rate-limit"));
 
 var _morgan = _interopRequireDefault(require("morgan"));
 
-var _expressMongoSanitize = _interopRequireDefault(require("express-mongo-sanitize"));
-
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
 var _errorHandler = require("./middlewere/errorHandler");
 
-var _routes = _interopRequireDefault(require("./routes"));
+var _apolloServerExpress = require("apollo-server-express");
+
+var _shemas = _interopRequireDefault(require("./graphql/shemas"));
+
+var _resolvers = _interopRequireDefault(require("./graphql/resolvers"));
 
 var app = (0, _express["default"])();
 
@@ -60,9 +61,7 @@ app.use((0, _xssClean["default"])()); // Prevent xss attacks
 
 app.use((0, _hpp["default"])()); // Prevent http param polution
 
-app.use((0, _compression["default"])());
-app.use((0, _expressMongoSanitize["default"])()); // Sanitize request
-// Rate limiting
+app.use((0, _compression["default"])()); // Rate limiting
 
 var limiter = (0, _expressRateLimit["default"])({
   windowMs: 10 * 60 * 1000,
@@ -70,9 +69,7 @@ var limiter = (0, _expressRateLimit["default"])({
   max: 100 // 100 requests
 
 });
-app.use(limiter); // routes setup
-
-(0, _routes["default"])(app); // Catch all route
+app.use(limiter); // Catch all route
 
 app.use("*", function (req, res) {
   res.status(404).json({
@@ -82,5 +79,48 @@ app.use("*", function (req, res) {
 
 app.use(_errorHandler.notFound);
 app.use(_errorHandler.errorHandler);
-var _default = app;
-exports["default"] = _default;
+
+function startServer() {
+  return _startServer.apply(this, arguments);
+}
+
+function _startServer() {
+  _startServer = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+    var server;
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            server = new _apolloServerExpress.ApolloServer({
+              typeDefs: _shemas["default"],
+              resolvers: _resolvers["default"]
+            });
+            _context.next = 3;
+            return server.start();
+
+          case 3:
+            // This middleware should be added before calling `applyMiddleware`.
+            server.applyMiddleware({
+              app: app
+            });
+            _context.next = 6;
+            return new Promise(function (r) {
+              return app.listen({
+                port: 4000
+              }, r);
+            });
+
+          case 6:
+            console.log("\uD83D\uDE80 Server ready at http://localhost:4000".concat(server.graphqlPath));
+
+          case 7:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _startServer.apply(this, arguments);
+}
+
+startServer();

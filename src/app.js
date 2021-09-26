@@ -9,9 +9,9 @@ import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { notFound, errorHandler } from "./middlewere/errorHandler";
-
-
-
+import { ApolloServer, gql } from "apollo-server-express";
+import typeDefs from "./graphql/shemas";
+import resolvers from "./graphql/resolvers";
 const app = express();
 dotenv.config();
 
@@ -42,7 +42,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-
 // Catch all route
 app.use("*", (req, res) => {
   res.status(404).json({
@@ -53,4 +52,20 @@ app.use("*", (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-export default app;
+async function startServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+  await server.start();
+
+  // This middleware should be added before calling `applyMiddleware`.
+
+  server.applyMiddleware({ app });
+
+  await new Promise((r) => app.listen({ port: 4000 }, r));
+
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+}
+
+startServer();
