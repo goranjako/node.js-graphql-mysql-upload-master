@@ -1,0 +1,61 @@
+{
+  "name": "node.js-graphql-mysql-upload-master",
+  "version": "1.0.0",
+  "description": "node-graphql-upload-mysql-master",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec babel-node ./src/app.js",
+    "build": "rimraf dist && babel ./src --out-dir dist ",
+    "start": "node ./dist/index.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goranjako/node.js-graphql-mysql-upload-master.git"
+  },
+  "author": "Goran Jakovljević",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goranjako/node.js-graphql-mysql-upload-master/issues"
+  },
+  "homepage": "https://github.com/goranjako/node.js-graphql-mysql-upload-master#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/register": "^7.15.3",
+    "@babel/runtime": "^7.15.4",
+    "babel-loader": "^8.2.2",
+    "babel-watch": "^7.5.0",
+    "compression": "^1.7.4",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express-mongo-sanitize": "^2.1.0",
+    "express-rate-limit": "^5.3.0",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.12.1",
+    "helmet": "^4.6.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.0",
+    "nodemon": "^2.0.13",
+    "passport": "^0.5.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-jwt": "^4.0.0",
+    "pm2": "^5.1.2",
+    "sequelize": "^6.6.5",
+    "sequelize-cli": "^6.2.0",
+    "socket.io": "^4.2.0",
+    "xss-clean": "^0.1.1"
+  }
+}
