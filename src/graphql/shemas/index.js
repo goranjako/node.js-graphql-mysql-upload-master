@@ -1,15 +1,16 @@
-import { gql } from "apollo-server-express";
+import {  gql } from 'apollo-server-express';
 
-import user from "./shema";
+import upload from "./upload";
+import user from './user';
 
 const base = gql`
-  type Query {
+  extend type Query {
     _: String!
   }
 
-  type Mutation {
+  extend type Mutation {
     _: String!
   }
 `;
-const typeDefs = [base, user];
+const typeDefs = [base, upload,user];
 export default typeDefs;

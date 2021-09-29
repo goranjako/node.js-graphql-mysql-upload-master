@@ -4,6 +4,8 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
+var _upload = _interopRequireDefault(require("./upload.resolver"));
+
 var _user = _interopRequireDefault(require("./user.resolver"));
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -12,6 +14,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 module.exports = {
   // modifier - the name of the type, and each time ANY mutation or subscription that returns a post, it will go through this modifier and apply these modifications
-  Query: _objectSpread({}, _user["default"].Query),
-  Mutation: _objectSpread({}, _user["default"].Mutation)
+  Query: _objectSpread(_objectSpread({}, _upload["default"].Query), _user["default"].Query),
+  Mutation: _objectSpread(_objectSpread({}, _upload["default"].Mutation), _user["default"].Mutation)
 };

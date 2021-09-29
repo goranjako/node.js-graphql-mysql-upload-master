@@ -1,7 +1,7 @@
-import {  gql } from 'apollo-server-express';
+import { ApolloServer, gql } from "apollo-server-express";
 
 
-const user= gql `
+const user = gql`
 type User {
   id:ID!
   fullName:String!
@@ -32,4 +32,4 @@ extend type Query {
 `;
 
 
-export default  user
+export default user;

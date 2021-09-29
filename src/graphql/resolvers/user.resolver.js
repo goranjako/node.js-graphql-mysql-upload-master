@@ -1,28 +1,18 @@
 import { UserInputError } from "apollo-server-express";
 import bcrypt from "bcrypt-nodejs";
-
 import jwt from "jsonwebtoken";
-//import { signUp, signIn } from "../../config/verify.js";
+import { signUp, signIn } from "../../middlewere/verify";
+
 import dotenv from "dotenv";
 dotenv.config();
 
-export default {
+const resolver = {
   Query: {
-    //getById
-    userId: async (parent, args, { req, User }) => {
-      await authHeader(req);
-      try {
-        const user = await User.findById(args.id);
-        return user;
-      } catch (error) {
-        throw new UserInputError("User not found");
-      }
-    },
     //Login
-    login: async (paren, { input }, { User }) => {
+    login: async (paren, { input }, { db }) => {
       await signIn.validate(input, { abortEarly: false });
       try {
-        const user = await User.findOne({ email: input.email });
+        const user = await db.User.findOne({ where: { email: input.email } });
         if (!user) {
           throw new UserInputError("User  not found");
         }
@@ -41,19 +31,20 @@ export default {
   },
   Mutation: {
     //Register
-    register: async (paren, { input }, { User }) => {
+
+    register: async (paren, { input }, { db }) => {
       await signUp.validate(input, { abortEarly: false });
       try {
-        const user = await User.findOne({ email: input.email });
+        const user = await db.User.findOne({ where: { email: input.email } });
         if (user) {
           throw new UserInputError("User already Exists");
         }
-        let newUser = new User({
+        const newUser = {
           fullName: input.fullName,
           email: input.email,
           password: input.password,
-        });
-        const saveduser = await newUser.save();
+        };
+        const saveduser = await db.User.create(newUser);
         const token = jwt.sign({ saveduser }, process.env.SECRET_KEY, {
           expiresIn: 60 * 60,
         });
@@ -64,3 +55,5 @@ export default {
     },
   },
 };
+
+module.exports = resolver;
