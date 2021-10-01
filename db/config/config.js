@@ -8,7 +8,7 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
     define: {
-      timestamps: false
+      timestamps: true
   }
 
   },
