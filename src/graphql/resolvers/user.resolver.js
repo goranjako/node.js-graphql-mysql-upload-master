@@ -2,7 +2,6 @@ import { UserInputError } from "apollo-server-express";
 import bcrypt from "bcrypt-nodejs";
 import jwt from "jsonwebtoken";
 import { signUp, signIn } from "../../middlewere/verify";
-
 import dotenv from "dotenv";
 dotenv.config();
 
