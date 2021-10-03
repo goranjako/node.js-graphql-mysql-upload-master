@@ -21,7 +21,7 @@ module.exports = function (req) {
 
     if (token) {
       try {
-        var user = jwt.verify(token, process.env.SECRET_TOKEN);
+        var user = jwt.verify(token, process.env.SECRET_KEY);
         return user;
       } catch (err) {
         throw new AuthenticationError('Invalid/Expired token');

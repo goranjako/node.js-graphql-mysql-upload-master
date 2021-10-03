@@ -8,6 +8,7 @@ const upload = gql`
   scalar Upload
 
   type File {
+    id: ID!
     url: String!
     categories: String!
   }
@@ -22,10 +23,14 @@ const upload = gql`
     image: Upload!
     categories: String!
   }
+  type Message {
+    message: String!
+  }
 
   type Mutation {
     # Multiple uploads are supported. See graphql-upload docs for details.
     singleUpload(input: uploadInput!): File!
+    deleteImg(id: ID!): Message!
   }
 `;
 export default  upload;
