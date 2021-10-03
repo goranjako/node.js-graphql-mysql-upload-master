@@ -1,13 +1,23 @@
 import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload';
 import { UserInputError } from "apollo-server-express";
 import authHeader from "../../middlewere/auth";
-
+import { unlink } from 'fs';
 
 const resolvers = {
     // This maps the `Upload` scalar to the implementation provided
     // by the `graphql-upload` package.
     Upload: GraphQLUpload,
-  
+    Query: {
+      uploads: async (parent, args, { req, db }) => {
+        await authHeader(req);
+        try {
+          const pictures = await db.Uploads.findAll();
+          return pictures;
+        } catch (error) {
+          throw new UserInputError("Pictures not found");
+        }
+      },
+      },
     Mutation: {
       singleUpload: async (parent, { input },{ req, db }) => {
         try{
@@ -39,7 +49,17 @@ const resolvers = {
       catch (error) {
         throw error;
       }
+    },
+  
+  deleteImg: async (parent, { id }, { req, db }) => {
+    await authHeader(req);
+    try {
+      const pictures = await db.Uploads.destroy({ where: { id: id } });
+      return { message: "Successful Delete Picture" };
+    } catch (error) {
+      throw new UserInputError("Picture not found");
     }
   }
+    }
 }
   module.exports = resolvers
