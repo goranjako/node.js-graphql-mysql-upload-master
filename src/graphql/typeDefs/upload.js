@@ -1,6 +1,5 @@
 import { ApolloServer, gql } from "apollo-server-express";
 
-
 const upload = gql`
   # The implementation for this scalar is provided by the
   # 'GraphQLUpload' export from the 'graphql-upload' package
@@ -17,7 +16,7 @@ const upload = gql`
     # This is only here to satisfy the requirement that at least one
     # field be present within the 'Query' type.  This example does not
     # demonstrate how to fetch uploads back.
-   uploads:[File!]
+    uploads: [File!]
   }
   input uploadInput {
     image: Upload!
@@ -33,4 +32,4 @@ const upload = gql`
     deleteImg(id: ID!): Message!
   }
 `;
-export default  upload;
+export default upload;
