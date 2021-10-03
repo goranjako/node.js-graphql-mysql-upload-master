@@ -1,33 +1,44 @@
+import * as yup from 'yup';
 
-import db from "../../db/models/";
+/**
+ * USER MODEL Validation Rules
+ */
 
-class ValidationRules  {
+const fullName = yup
+    .string()
+    .required('Username is required.')
+    .trim()
+    .min(3, 'Username should have atleast 5 characters.')
+    .max(20, 'Username should have atmost 10 characters.')
+    .matches(/^\w+$/, 'Should be alphanumeric.')
+    
+    const password = yup
+    .string()
+    .required('password is required.')
+    .trim()
+    .min(3, 'password should have atleast 5 characters.')
+    .max(20, 'Username should have atmost 10 characters.')
+    
 
-    async checkDuplicateFullName(req, res, next) {
-      try {
-        const user = await db.User.findOne({ where: { fullName: req.body.fullName } });
-        if (user) {
-          return res.json({ success: false, msg: 'fullName already exists! ' });
-        }
-        return next();
-      }
-      catch (error) {
-        return res.status(400).json(error);
-      }
-    }
+const email = yup
+    .string()
+    .required('Email is required.')
+    .email('This is invalid email.')
+ 
   
-    async checkDuplicateEmail(req, res, next) {
-        try {
-          const user = await db.User.findOne({ where: { email: req.body.email } });
-          if (user) {
-            return res.json({ success: false, msg: 'Email already exists! ' });
-          }
-          return next();
-        }
-        catch (error) {
-          return res.status(400).json(error);
-        }
-      }
-  
-  }
-  export default new ValidationRules();
+
+
+// User Registeration Validation Schema
+export const signUp = yup.object().shape({
+     email,
+    fullName,
+    password
+});
+
+export const signIn = yup.object().shape({
+  email,
+  password
+});
+
+
+

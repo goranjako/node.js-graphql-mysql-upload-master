@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec babel-node ./src/app.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "build": "rimraf dist && babel ./src --out-dir dist ",
-    "start": "node ./dist/index.js "
+    "start": "pm2 start ./dist/index.js ",
+    "stop": "pm2 stop ./dist/index.js ",
+    "restart": "pm2 restart ./dist/index.js "
   },
   "repository": {
     "type": "git",
@@ -36,6 +38,8 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "apollo-server": "^3.3.0",
+    "apollo-server-express": "^3.3.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -43,6 +47,8 @@
     "express-rate-limit": "^5.3.0",
     "express-session": "^1.17.2",
     "express-validator": "^6.12.1",
+    "graphql": "^15.6.0",
+    "graphql-upload": "^12.0.0",
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
@@ -56,6 +62,7 @@
     "sequelize": "^6.6.5",
     "sequelize-cli": "^6.2.0",
     "socket.io": "^4.2.0",
-    "xss-clean": "^0.1.1"
+    "xss-clean": "^0.1.1",
+    "yup": "^0.32.9"
   }
 }

@@ -1,24 +1,24 @@
-
+const { AuthenticationError } = require('apollo-server');
 const jwt = require('jsonwebtoken');
+import dotenv from 'dotenv';
+dotenv.config();
 
-class authManager {
-  async verifyToken(req, res, next) {
-    try {
-      // Gather the jwt access token from the request header
-      const authHeader = await req.headers['authorization'];
-      const token = authHeader && authHeader.split(' ')[1];
-      if (token == null) return res.status(401).json({ message: "No token provided!" }); // if there isn't any token
-
-      jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        console.log(err)
-        if (err) return res.status(403).json({ success: false, msg: 'Unauthorized.' });
-        req.user = user
-        next() // pass the execution off to whatever request the client intended
-      });
+module.exports = (req) => {
+  // context = { ...headers }
+  const authHeader = req.req.headers.authorization;
+  if (authHeader) {
+    // convention for tokens: "Bearer ..."
+    const token = authHeader.split('Bearer ')[1];
+    if (token) {
+      try {
+        const user = jwt.verify(token, process.env.SECRET_KEY);
+        return user;
+      } catch (err) {
+        throw new AuthenticationError('Invalid/Expired token');
+      }
     }
-    catch (error) {
-      return res.status(401).json({ message: "Your token has expired." });
-    }
+    throw new Error("Authentication token must be 'Bearer [token]'");
   }
-}
-export default new authManager(); 
+// error handling
+  throw new Error('Authorization header must be provided');
+};
